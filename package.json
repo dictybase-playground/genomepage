@@ -1,5 +1,9 @@
 {
   "name": "genepage",
+  "engines": {
+      "node": "0.10.x",
+      "npm": "1.x"
+  },
   "version": "0.0.1",
   "description": "A web application to display genomic information at dictyBase",
   "authors": [
@@ -24,8 +28,8 @@
   },
   "dependencies": {
     "react-router": "0.10.2",
-    "jquery": "2.1.1",
-    "bootstrap": "3.1.1",
+    "jquery": "2.x",
+    "bootstrap": "3.x",
     "immutable": "~3.0.2",
     "object-assign": "~1.0.0"
   },
