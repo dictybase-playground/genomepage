@@ -8,56 +8,75 @@ var tar = require('tar');
 var gulp = require("gulp");
 var gutil = require("gulp-util");
 
-var LATEST_BOOTSTRAP_URL = 'https://github.com/twbs/bootstrap/archive/v3.3.1.tar.gz';
-var LATEST_FLATUI_URL = 'https://github.com/designmodo/Flat-UI/archive/2.2.2.tar.gz';
+var BOOTSTRAP_VERSION = '3.3.1';
+var FLATUI_VERSION = '2.2.2';
+var latest_bootstrap_url = ['https://github.com/twbs/bootstrap/archive/', 'v', BOOTSTRAP_VERSION, '.tar.gz'].join('');
+var latest_flatui_url = ['https://github.com/designmodo/flat-ui/archive/', FLATUI_VERSION, '.tar.gz'].join('');
+var bootstrap_folder = ['bootstrap-', BOOTSTRAP_VERSION].join('');
+var flatui_folder = ['Flat-UI-', FLATUI_VERSION].join('');
 
 function getVendorFolder() {
-    return path.resolve(__dirname, 'src', 'styles', 'vendor');
+    return path.resolve(__dirname, '..', 'src', 'styles', 'vendor');
 }
 
-function downloadAndExtract(url, path) {
+function renameBootstrapFolder() {
+    var rename = function() {
+        var vendorFolder = getVendorFolder();
+        fs.renameSync(
+            path.resolve(vendorFolder,bootstrap_folder),
+            path.resolve(vendorFolder, 'bootstrap')
+        );
+    }
+    return rename;
+}
+
+function renameFlatUIFolder() {
+    var rename = function() {
+        var vendorFolder = getVendorFolder();
+        fs.renameSync(
+            path.resolve(vendorFolder,flatui_folder),
+            path.resolve(vendorFolder, 'flatui')
+        );
+    }
+    return rename;
+}
+
+function downloadAndExtract(url, path , cb) {
     request
     .get(url)
     .on('error',function(err) {
         gutil.log(gutil.colors.red(err));
     })
     .pipe(zlib.createGunzip())
-    .pipe(tar.Extract({path: path}));
+    .pipe(tar.Extract({path: path}))
+    .on('end', function() {
+        gutil.log(gutil.colors.yellow("done extracting for ", url));
+        cb();
+        gutil.log(gutil.colors.yellow("done renaming for extracted ", url));
+    });
 }
 
 gulp.task("clean:vendor", function() {
     var vendorPath = getVendorFolder();
-    if (fs.lstatSync(vendorPath).isDirectory()) {
-        del(vendorPath, function(err) {
-            if (err) {
-                gutil.PluginError(err);
-            }
-            else {
-                gutil.log("deleted ", gutil.colors.cyan(vendorPath));
-            }
-        });
-    }
-    else {
-        gutil.log("path ", vendorPath, " does not exist !!!");
+    if (fs.existsSync(vendorPath)) {
+        del.sync(vendorPath)
+        gutil.log("deleted ", gutil.colors.yellow(vendorPath));
     }
 });
 
-gulp.task("create:vendor", function() {
+gulp.task("create:vendor", ["clean:vendor"], function() {
     var vendorPath = getVendorFolder();
-    mkdirp(vendorPath, function(err) {
-        if (err) {
-            gutil.log(gutil.colors.red(err));
-        }
-    });
+    mkdirp.sync(vendorPath);
+    gutil.log(gutil.colors.yellow("created folder ", vendorPath));
 });
 
-gulp.task("download:bootstrap", function() {
-    downloadAndExtract(LATEST_BOOTSTRAP_URL, getVendorFolder());
+gulp.task("download:css", ["create:vendor"], function() {
+    var fnb = renameBootstrapFolder();
+    var fnflat = renameFlatUIFolder();
+    downloadAndExtract(latest_bootstrap_url, getVendorFolder(), fnb);
+    downloadAndExtract(latest_flatui_url, getVendorFolder(), fnflat);
 });
 
 
-gulp.task("download:flatui", function() {
-    downloadAndExtract(LATEST_FLATUI_URL, getVendorFolder());
-});
+gulp.task("setup:flatcss", ["download:css"]);
 
-gulp.task("setup:flatcss", ["clean:vendor", "create:vendor", "download:bootstrap", "download:flatui"]);
