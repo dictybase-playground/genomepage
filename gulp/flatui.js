@@ -20,40 +20,23 @@ function getVendorFolder() {
 }
 
 function renameBootstrapFolder() {
-    var rename = function() {
-        var vendorFolder = getVendorFolder();
-        fs.renameSync(
-            path.resolve(vendorFolder,bootstrap_folder),
-            path.resolve(vendorFolder, 'bootstrap')
-        );
-    }
-    return rename;
+    var vendorFolder = getVendorFolder();
+    fs.renameSync(
+        path.resolve(vendorFolder,bootstrap_folder),
+        path.resolve(vendorFolder, 'bootstrap')
+    );
 }
 
 function renameFlatUIFolder() {
-    var rename = function() {
-        var vendorFolder = getVendorFolder();
-        fs.renameSync(
-            path.resolve(vendorFolder,flatui_folder),
-            path.resolve(vendorFolder, 'flatui')
-        );
-    }
-    return rename;
+    var vendorFolder = getVendorFolder();
+    fs.renameSync(
+        path.resolve(vendorFolder,flatui_folder),
+        path.resolve(vendorFolder, 'flatui')
+    );
 }
 
-function downloadAndExtract(url, path , cb) {
-    request
-    .get(url)
-    .on('error',function(err) {
-        gutil.log(gutil.colors.red(err));
-    })
-    .pipe(zlib.createGunzip())
-    .pipe(tar.Extract({path: path}))
-    .on('end', function() {
-        gutil.log(gutil.colors.yellow("done extracting for ", url));
-        cb();
-        gutil.log(gutil.colors.yellow("done renaming for extracted ", url));
-    });
+function getDownloadStream(url) {
+    return request.get(url);
 }
 
 gulp.task("clean:vendor", function() {
@@ -70,13 +53,35 @@ gulp.task("create:vendor", ["clean:vendor"], function() {
     gutil.log(gutil.colors.yellow("created folder ", vendorPath));
 });
 
-gulp.task("download:css", ["create:vendor"], function() {
-    var fnb = renameBootstrapFolder();
-    var fnflat = renameFlatUIFolder();
-    downloadAndExtract(latest_bootstrap_url, getVendorFolder(), fnb);
-    downloadAndExtract(latest_flatui_url, getVendorFolder(), fnflat);
+gulp.task("setup:flatcss", ["create:vendor"], function() {
+    var path = getVendorFolder();
+    // bootstrap
+    var bstream = getDownloadStream(latest_bootstrap_url);
+    bstream
+    .pipe(zlib.createGunzip())
+    .pipe(tar.Extract({path: path}))
+    .on('error', function(error) {
+        gutil.log(gutil.colors.read(error))
+    })
+    .on('end', function() {
+        gutil.log(gutil.colors.yellow("done download and extracting from ", latest_bootstrap_url));
+        renameBootstrapFolder();
+        gutil.log(gutil.colors.yellow("done renaming bootstrap folder"));
+    });
+
+    // flat-ui
+    var fstream = getDownloadStream(latest_flatui_url);
+    fstream
+    .pipe(zlib.createGunzip())
+    .pipe(tar.Extract({path: path}))
+    .on('error', function(error) {
+        gutil.log(gutil.colors.read(error))
+    })
+    .on('end', function() {
+        gutil.log(gutil.colors.yellow("done download and extracting from ", latest_flatui_url));
+        renameFlatUIFolder();
+        gutil.log(gutil.colors.yellow("done renaming flat-ui folder"));
+    });
 });
 
-
-gulp.task("setup:flatcss", ["download:css"]);
 
