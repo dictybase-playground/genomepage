@@ -1,3 +1,4 @@
+var async = require('async');
 var del = require('del');
 var path = require('path');
 var fs = require('fs');
@@ -39,6 +40,14 @@ function getDownloadStream(url) {
     return request.get(url);
 }
 
+function copyStyleFiles() {
+    var vendorFolder = getVendorFolder();
+    var flatSrcGlob = [path.resolve(vendorFolder, 'flatui', 'fonts', 'glyphicons'), '/*'].join('');
+    var bootTargetFolder = path.resolve(vendorFolder, 'bootstrap', 'fonts', 'glyphicons');
+    gulp.src(flatSrcGlob)
+    .pipe(gulp.dest(bootTargetFolder));
+}
+
 gulp.task("clean:vendor", function() {
     var vendorPath = getVendorFolder();
     if (fs.existsSync(vendorPath)) {
@@ -55,33 +64,49 @@ gulp.task("create:vendor", ["clean:vendor"], function() {
 
 gulp.task("setup:flatcss", ["create:vendor"], function() {
     var path = getVendorFolder();
-    // bootstrap
-    var bstream = getDownloadStream(latest_bootstrap_url);
-    bstream
-    .pipe(zlib.createGunzip())
-    .pipe(tar.Extract({path: path}))
-    .on('error', function(error) {
-        gutil.log(gutil.colors.read(error))
-    })
-    .on('end', function() {
-        gutil.log(gutil.colors.yellow("done download and extracting from ", latest_bootstrap_url));
-        renameBootstrapFolder();
-        gutil.log(gutil.colors.yellow("done renaming bootstrap folder"));
+    async.series({
+        bootstrap: function(callback) {
+            var bstream = getDownloadStream(latest_bootstrap_url);
+            bstream
+            .pipe(zlib.createGunzip())
+            .pipe(tar.Extract({path: path}))
+            .on('error', function(error) {
+                gutil.log(gutil.colors.read(error))
+                callback(error, null);
+            })
+            .on('end', function() {
+                gutil.log(gutil.colors.yellow("done download and extracting from ", latest_bootstrap_url));
+                callback(null, 'bootstrap');
+            });
+        },
+        flatui: function(callback) {
+            var fstream = getDownloadStream(latest_flatui_url);
+            fstream
+            .pipe(zlib.createGunzip())
+            .pipe(tar.Extract({path: path}))
+            .on('error', function(error) {
+                gutil.log(gutil.colors.read(error))
+                callback(error, null)
+            })
+            .on('end', function() {
+                gutil.log(gutil.colors.yellow("done download and extracting from ", latest_flatui_url));
+                callback(null, 'flatui');
+            });
+        }
+    }, function(error, results) {
+        if (error) {
+            gutil.log(gutil.colors.red(error));
+        }
+        else {
+            renameBootstrapFolder();
+            gutil.log(gutil.colors.yellow("done renaming bootstrap folder"));
+            renameFlatUIFolder();
+            gutil.log(gutil.colors.yellow("done renaming flat-ui folder"));
+            copyStyleFiles()
+            gutil.log(gutil.colors.yellow("copied style files from flatui to bootstrap"));
+        }
     });
 
-    // flat-ui
-    var fstream = getDownloadStream(latest_flatui_url);
-    fstream
-    .pipe(zlib.createGunzip())
-    .pipe(tar.Extract({path: path}))
-    .on('error', function(error) {
-        gutil.log(gutil.colors.read(error))
-    })
-    .on('end', function() {
-        gutil.log(gutil.colors.yellow("done download and extracting from ", latest_flatui_url));
-        renameFlatUIFolder();
-        gutil.log(gutil.colors.yellow("done renaming flat-ui folder"));
-    });
 });
 
 
