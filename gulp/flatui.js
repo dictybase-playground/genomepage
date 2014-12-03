@@ -42,10 +42,17 @@ function getDownloadStream(url) {
 
 function copyStyleFiles() {
     var vendorFolder = getVendorFolder();
+    // copy glyphicons to fonts folder
     var flatSrcGlob = [path.resolve(vendorFolder, 'flatui', 'fonts', 'glyphicons'), '/*'].join('');
     var bootTargetFolder = path.resolve(vendorFolder, 'bootstrap', 'fonts', 'glyphicons');
     gulp.src(flatSrcGlob)
     .pipe(gulp.dest(bootTargetFolder));
+
+    // copy flatui fonts to its less folder
+    var flatFontsGlob = [path.resolve(vendorFolder, 'flatui', 'fonts'), '/**/*'].join('');
+    var flatLessTarget = [path.resolve(vendorFolder, 'flatui', 'less', 'fonts')].join('');
+    gulp.src(flatFontsGlob)
+        .pipe(gulp.dest(flatLessTarget));
 }
 
 gulp.task("clean:vendor", function() {
