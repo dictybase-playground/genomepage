@@ -11,7 +11,7 @@ AppContainer -- Holds the entire application(all the tabs) and routing.
         GenomicInfoView - Gbrowse/Jbrowse image panel.
         ProductView - Protein information panel.
         GeneLinksView - List of link outs panel.
-    ProteinTabContainer - Container for __Protein Information__ tab.
+    PolypeptideTabContainer - Container for __Protein Information__ tab.
         ProteinInfoView - Panel for general protein information.
         SequenceInfoView - Protein sequence panel.
         ProteinLinksView - Panel for links.
