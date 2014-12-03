@@ -4,6 +4,7 @@ For the naming convention, the component that more or less holds the other
 should have the word __container__. The containers which renders html should
 have the word __view__.
 
+```
 AppContainer -- Holds the entire application and routing.
     TabsContainer -- Holds all the tabs, their name and ordering.
         SummaryTabContainer - Holds all the panels for __Gene Summary__ tab.
@@ -18,5 +19,5 @@ AppContainer -- Holds the entire application and routing.
         OrthologTabContainer - Container for __Ortholog__ tab.
             OrthologTableView - Tabular display of orthologs.
         BlastTabContainer - Container for __Blast__ tab.
-
+```
 
