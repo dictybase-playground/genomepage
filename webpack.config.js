@@ -1,8 +1,6 @@
 var webpack = require('webpack');
-var os = require('os');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-var ipAddr = os.networkInterfaces().eth0[0].address;
 module.exports = {
     stats: {
         colors: true,
@@ -11,12 +9,9 @@ module.exports = {
     output: {
         filename: 'genepage.js',
         path: './build',
-        publicPath: '/js/'
     },
     entry: [
-        'webpack-dev-server/client?http://' + ipAddr + ':9000',
-        'webpack/hot/dev-server',
-        './src/scripts/main.jsx'
+        './src/scripts/app.jsx'
     ],
     module: {
         loaders: [
@@ -29,8 +24,8 @@ module.exports = {
                 loader: 'style-loader!css-loader'
             },
             {
-                test: /\.sass$/,
-                loader: 'style-loader!css-loader!sass-loader'
+                test: /\.less/,
+                loader: 'style!css!less'
             },
             {
                 test: /\.(png|jpg)$/,
@@ -43,13 +38,11 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.jsx', '.sass', '.css']
+        extensions: ['', '.js', '.jsx', '.less', '.css']
     },
     plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
         new webpack.ProvidePlugin({ jQuery: "jquery" }),
-        new HtmlWebpackPlugin()
+        new HtmlWebpackPlugin({template: 'src/template/index.html'})
     ]
 };
 
