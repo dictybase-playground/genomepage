@@ -14,10 +14,14 @@ require('../styles/vendor/bootstrap/dist/js/bootstrap');
 
 
 var AppContainer = React.createClass({
-
     render: function() {
         return (
             <div className="container-fluid">
+                <div className="row">
+                    <div className="col-xs-12">
+                        <h5 className="text-center">Gene Information for DPU_G0051064 </h5>
+                    </div>
+                </div>
                 <div className="row">
                     <div className="col-xs-12">
                         <TabbedArea>
@@ -37,12 +41,11 @@ var AppContainer = React.createClass({
 
 });
 
-
 var routes = (
     <Routes>
         <Route name="genepage" path="/" handler={AppContainer}>
-            <Route name="summary" path="/summary" handler={SummaryTabContainer} />
             <Route name="polypeptide" path="/polypeptide" handler={PolypeptideTabContainer} />
+            <Route name="summary" path="/summary" handler={SummaryTabContainer} />
             <DefaultRoute handler={SummaryTabContainer} />
         </Route>
     </Routes>
