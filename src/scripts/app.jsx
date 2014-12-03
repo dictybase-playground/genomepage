@@ -1,4 +1,4 @@
-var React = require('React');
+var React = require('react');
 var Router = require('react-router');
 var Route = Router.Route;
 var Routes = Router.Routes;
@@ -6,8 +6,8 @@ var DefaultRoute = Router.DefaultRoute;
 var Dicty = require('dicty-react-components');
 var TabbedArea = Dicty.TabbedArea;
 var TabPane = Dicty.TabPane;
-var SummaryTabContainer = require('./SummaryTabContainer');
-var PolypeptideTabContainer = require('./PolypeptideTabContainer');
+var SummaryTabContainer = require('./components/SummaryTabContainer');
+var PolypeptideTabContainer = require('./components/PolypeptideTabContainer');
 
 require('../styles/main.less');
 require('../styles/vendor/bootstrap/dist/js/bootstrap');
