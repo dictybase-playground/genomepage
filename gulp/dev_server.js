@@ -5,6 +5,7 @@ var webpackDev = require('../webpack.config.js');
 var os = require('os');
 var gulp = require("gulp");
 var gutil = require("gulp-util");
+var deploy = require('gulp-gh-pages');
 
 var ipAddr = os.networkInterfaces().eth0[0].address;
 gulp.task("webpack-dev-server", function(callback) {
@@ -29,6 +30,11 @@ gulp.task("build", function (callback) {
         }));
         callback();
     });
+});
+
+gulp.task("deploy", ["build"], function() {
+    return gulp.src("../build/**")
+           .pipe(deploy());
 });
 
 
