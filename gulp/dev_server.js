@@ -5,7 +5,8 @@ var webpackDev = require('../webpack.config.js');
 var os = require('os');
 var gulp = require("gulp");
 var gutil = require("gulp-util");
-var deploy = require('gulp-gh-pages');
+var ghpages = require('gh-pages');
+var path = require('path');
 
 var ipAddr = os.networkInterfaces().eth0[0].address;
 gulp.task("webpack-dev-server", function(callback) {
@@ -33,8 +34,9 @@ gulp.task("build", function (callback) {
 });
 
 gulp.task("deploy", ["build"], function() {
-    return gulp.src("../build/**")
-           .pipe(deploy());
+    ghpages.publish(path.join(__dirname,'..', 'build'), function(err) {
+        if (err) throw new gutil.PluginError("gh-pages", err);
+    });
 });
 
 
