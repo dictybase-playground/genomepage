@@ -10,10 +10,10 @@ var SummaryTabContainer = React.createClass({
     render: function() {
         return (
             <PanelGroup>
-                <GeneInfoView />
-                <GenomicInfoView />
-                <ProductView />
-                <GeneLinksView />
+                <GeneInfoView {...this.props} />
+                <GenomicInfoView {...this.props} />
+                <ProductView {...this.props} />
+                <GeneLinksView {...this.props} />
             </PanelGroup>
         );
     }

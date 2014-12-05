@@ -1,27 +1,30 @@
 var React = require('react');
 var Panel = require('dicty-react-components').Panel;
+var SplitRowView = require('./SplitRowView');
+var ContainerClass = require('../utils/mixins').ContainerClass;
+
+var GeneName = React.createClass({
+    render: function () {
+        return (
+            <b> Gene Name </b>
+        );
+    }
+});
 
 var GeneInfoView = React.createClass({
+    mixins: [ContainerClass],
     render: function() {
         return (
                 <Panel title="General Information" id="geneinfo" open={true}>
-                    <div className="container-fluid">
-                        <div className="row">
-                            <div className="col-xs-4">
-                                Gene Name
-                            </div>
-                            <div className="col-xs-8">
-                                DPU_G0051604
-                            </div>
-                        </div>
-                        <div className="row">
-                            <div className="col-xs-4">
-                                Gene ID
-                            </div>
-                            <div className="col-xs-8">
-                                DPU_G0051604
-                            </div>
-                        </div>
+                    <div className={this.getContainerClass()}>
+                        <SplitRowView
+                            leftColData="Gene Name"
+                            rightColData="DPU_G0051604"
+                        />
+                        <SplitRowView
+                            leftColData="Gene ID"
+                            rightColData="DPU_G0051604"
+                        />
                         <div className="row">
                             <div className="col-xs-4">
                                 Community Annotations

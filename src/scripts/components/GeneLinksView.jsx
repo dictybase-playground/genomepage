@@ -1,11 +1,13 @@
 var React = require('react');
 var Panel = require('dicty-react-components').Panel;
+var ContainerClass = require('../utils/mixins').ContainerClass;
 
 var GeneLinksView = React.createClass({
+    mixins: [ContainerClass],
     render: function() {
         return (
             <Panel title="Links" id="genelinks" open={true}>
-                <div className="container-fluid">
+                <div className={this.getContainerClass()}>
                     <div className="row">
                         <div className="col-xs-4">
                             External Resources

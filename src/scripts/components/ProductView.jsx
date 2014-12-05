@@ -1,13 +1,15 @@
 var React = require('react');
 var Panel = require('dicty-react-components').Panel;
+var ContainerClass = require('../utils/mixins').ContainerClass;
 
 var ProductView = React.createClass({
+    mixins: [ContainerClass],
     render: function() {
         return (
             <Panel title="Gene Product Information" id="geneproduct" open={true}>
-                    <div className="container-fluid">
+                    <div className={this.getContainerClass()}>
                         <div className="row">
-                            <div className="col-xs-6">
+                            <div className="col-xs-7">
                                 <div className="row">
                                     <div className="col-xs-4">
                                         Protein Coding Gene
@@ -41,7 +43,7 @@ var ProductView = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-xs-6">
+                            <div className="col-xs-5">
                                 <div className="row">
                                     <div className="col-xs-4">
                                         Genomic Coordinates
