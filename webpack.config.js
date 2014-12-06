@@ -2,10 +2,8 @@ var webpack = require('webpack');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
-    stats: {
-        colors: true,
-        reasons: true
-    },
+    debug: false,
+    devtool: false,
     output: {
         filename: 'genepage.js',
         path: './build',
