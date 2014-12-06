@@ -3,10 +3,7 @@ var os = require('os');
 
 var ipAddr = os.networkInterfaces().eth0[0].address;
 module.exports = {
-    stats: {
-        colors: true,
-        reasons: true
-    },
+    devtool: "#inline-source-map",
     output: {
         filename: 'genepage.js',
         path: __dirname,
