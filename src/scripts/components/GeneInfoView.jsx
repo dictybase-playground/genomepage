@@ -3,10 +3,21 @@ var Panel = require('dicty-react-components').Panel;
 var SplitRowView = require('./SplitRowView');
 var ContainerClass = require('../utils/mixins').ContainerClass;
 
-var GeneName = React.createClass({
+var AnnoLink = React.createClass({
     render: function () {
         return (
-            <b> Gene Name </b>
+            <div className="row">
+                <div className="col-xs-6">
+                    <a href="http://wiki.dictybase.org/dictywiki/index.php/DPU_G0051064?action=edit">
+                        Add an annotation for DPU_G0051604
+                    </a>
+                </div>
+                <div className="col-xs-6">
+                    <a href="http://wiki.dictybase.org/dictywiki/index.php/Community_Annotations">
+                        Community Annotations Help
+                    </a>
+                </div>
+            </div>
         );
     }
 });
@@ -25,22 +36,10 @@ var GeneInfoView = React.createClass({
                             leftColData="Gene ID"
                             rightColData="DPU_G0051604"
                         />
-                        <div className="row">
-                            <div className="col-xs-4">
-                                Community Annotations
-                            </div>
-                            <div className="col-xs-8">
-                                <a href="http://wiki.dictybase.org/dictywiki/index.php/DPU_G0051064?action=edit">
-                                    Add an annotation for DPU_G0051604
-                                </a>
-                                &nbsp;
-                                &nbsp;
-                                &nbsp;
-                                <a href="http://wiki.dictybase.org/dictywiki/index.php/Community_Annotations">
-                                    Community Annotations Help
-                                </a>
-                            </div>
-                        </div>
+                        <SplitRowView
+                            leftColData="Community Annotations"
+                            rightColData={<AnnoLink />}
+                        />
                     </div>
                 </Panel>
         );
