@@ -2,7 +2,7 @@ var React = require('react');
 var PanelGroup = require('dicty-react-components').PanelGroup;
 var GeneInfoView = require('./GeneInfoView');
 var GenomicInfoView = require('./GenomicInfoView');
-var ProductView = require('./ProductView');
+var GeneProductView = require('./GeneProductView');
 var GeneLinksView = require('./GeneLinksView');
 
 var SummaryTabContainer = React.createClass({
@@ -12,7 +12,7 @@ var SummaryTabContainer = React.createClass({
             <PanelGroup>
                 <GeneInfoView {...this.props} />
                 <GenomicInfoView {...this.props} />
-                <ProductView {...this.props} />
+                <GeneProductView {...this.props} />
                 <GeneLinksView {...this.props} />
             </PanelGroup>
         );
