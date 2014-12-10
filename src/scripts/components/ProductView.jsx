@@ -1,6 +1,66 @@
 var React = require('react');
 var Panel = require('dicty-react-components').Panel;
 var ContainerClass = require('../utils/mixins').ContainerClass;
+var SplitRowView = require('./SplitRowView');
+
+var ProteinLinkView = React.createClass({
+    render: function() {
+        return (
+            <a href="#">Protein sequence, domains and much more ....</a>
+        );
+    }
+});
+
+var ProteinView = React.createClass({
+    mixins: [ContainerClass],
+    render: function() {
+        var colData = [
+            {
+                left: "Protein Coding Gene",
+                right: "DPU0050065"
+            },
+            {
+                left: "Protein Length",
+                right: "70aa"
+            },
+            {
+                left: "Protein Molecular Weight",
+                right: "7887.4 Da"
+            },
+            {
+                left: "More Protein Data",
+                right: <ProteinLinkView />
+            }
+        ];
+        var items = colData.map(function(element) {
+            return (
+                <SplitRowView
+                    leftColData={element.left}
+                    rightColData={element.right}
+                />
+            );
+        })
+        return (
+            <div className={this.getContainerClass()}>
+                {items}
+            </div>
+        )
+    }
+});
+
+var CoordinateView = React.createClass({
+    mixins: [ContainerClass],
+    render: function() {
+        return (
+            <div className={this.getContainerClass()}>
+                <SplitRowView
+                    leftColData="Genomic Coordinates"
+                    rightColData="Table"
+                />
+            </div>
+        );
+    }
+})
 
 var ProductView = React.createClass({
     mixins: [ContainerClass],
@@ -8,55 +68,15 @@ var ProductView = React.createClass({
         return (
             <Panel title="Gene Product Information" id="geneproduct" open={true}>
                     <div className={this.getContainerClass()}>
-                        <div className="row">
-                            <div className="col-xs-7">
-                                <div className="row">
-                                    <div className="col-xs-4">
-                                        Protein Coding Gene
-                                    </div>
-                                    <div className="col-xs-8">
-                                        DPU0051065
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-xs-4">
-                                        Protein  Length
-                                    </div>
-                                    <div className="col-xs-8">
-                                        70 aa
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-xs-4">
-                                        Protein Molecular Weight
-                                    </div>
-                                    <div className="col-xs-8">
-                                        7887.4 Da
-                                    </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-xs-4">
-                                        More Protein Data
-                                    </div>
-                                    <div className="col-xs-8">
-                                        <a href="#">Protein sequence, domains and much more ....</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-xs-5">
-                                <div className="row">
-                                    <div className="col-xs-4">
-                                        Genomic Coordinates
-                                    </div>
-                                    <div className="col-xs-8">
-                                        Table
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <SplitRowView
+                            leftColSize="7"
+                            rightColSize="5"
+                            leftColData={<ProteinView {...this.props} />}
+                            rightColData={<CoordinateView {...this.props} />}
+                        />
                     </div>
             </Panel>
-        );
+        )
     }
 
 });
