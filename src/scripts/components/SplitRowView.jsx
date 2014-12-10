@@ -8,12 +8,12 @@ var SplitRowView = React.createClass({
             React.PropTypes.string,
             React.PropTypes.number,
             React.PropTypes.component
-        ]),
+        ]).isRequired,
         rightColData: React.PropTypes.oneOfType([
             React.PropTypes.string,
             React.PropTypes.number,
             React.PropTypes.component
-        ]),
+        ]).isRequired,
         classType: React.PropTypes.oneOf(['xs','sm','md','lg'])
     },
     getDefaultProps: function() {
