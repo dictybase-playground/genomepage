@@ -34,8 +34,12 @@ gulp.task("build", function (callback) {
 });
 
 gulp.task("deploy", ["build"], function() {
-    ghpages.publish(path.join(__dirname,'..', 'build'), function(err) {
-        if (err) throw new gutil.PluginError("gh-pages", err);
+    ghpages.publish(path.join(__dirname,'..', 'build'), {
+        logger: function (msg) {
+            console.log(msg);
+        }
+    }, function(err) {
+            if (err) throw new gutil.PluginError("gh-pages", err);
     });
 });
 
