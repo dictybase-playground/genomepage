@@ -1,7 +1,7 @@
 var React = require('react');
 var Panel = require('dicty-react-components').Panel;
 
-var SequenceInfoView = React.createClass({
+var ProteinSequenceView = React.createClass({
     render: function() {
         return (
             <Panel title="Protein Sequence" id="proteinsequence" open={true}>
@@ -10,4 +10,4 @@ var SequenceInfoView = React.createClass({
     }
 });
 
-module.exports = SequenceInfoView;
+module.exports = ProteinSequenceView;
