@@ -1,14 +1,17 @@
 var webpack = require('webpack');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+var os = require('os');
 
+var ipAddr = os.networkInterfaces().eth0[0].address;
 module.exports = {
-    debug: false,
-    devtool: false,
+    devtool: "#inline-source-map",
     output: {
         filename: 'genepage.js',
-        path: './build',
+        path: __dirname,
+        publicPath: '/js/'
     },
     entry: [
+        'webpack-dev-server/client?http://' + ipAddr + ':9000',
+        'webpack/hot/dev-server',
         './src/scripts/app.jsx'
     ],
     module: {
@@ -39,8 +42,9 @@ module.exports = {
         extensions: ['', '.js', '.jsx', '.less', '.css']
     },
     plugins: [
-        new webpack.ProvidePlugin({ jQuery: "jquery" }),
-        new HtmlWebpackPlugin({template: 'src/template/index.html'})
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NoErrorsPlugin(),
+        new webpack.ProvidePlugin({ jQuery: "jquery" })
     ]
 };
 

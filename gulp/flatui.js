@@ -53,6 +53,12 @@ function copyStyleFiles() {
     var flatLessTarget = [path.resolve(vendorFolder, 'flatui', 'less', 'fonts')].join('');
     gulp.src(flatFontsGlob)
         .pipe(gulp.dest(flatLessTarget));
+
+    // copy flatui img to its less folder
+    var flatImgGlob = [path.resolve(vendorFolder, 'flatui', 'img'), '/**/**/*'].join('');
+    var flatLessImgTarget = [path.resolve(vendorFolder, 'flatui', 'less', 'img')].join('');
+    gulp.src(flatImgGlob)
+        .pipe(gulp.dest(flatLessImgTarget));
 }
 
 gulp.task("clean:vendor", function() {
