@@ -44,7 +44,7 @@ __Some idea borrowed from json graph of [falcor js](http://netflix.github.io/fal
                             key: 'Community Annotations', 
                             item: { 
                                 type: 'link', 
-                                data: { url: 'http://', image: 'http://', text: ''}
+                                data: { url: 'http://', text: ''}
                             }
                         }
                    ]
@@ -88,7 +88,7 @@ __Some idea borrowed from json graph of [falcor js](http://netflix.github.io/fal
                             key: 'Protein Coding Gene', 
                             item: { 
                                 type: 'linkProps',
-                                data: {
+                                data: { 
                                     url: 'http://', 
                                     text: 'DD091444',
                                     props: ['Curator reviewed', 'Derived from gene prediction']
@@ -327,6 +327,6 @@ and `data`.
         data: <to be used for display>
     }
 ```
-Here are the list and definitions of different [types] that the `item` key could hold.
+Here are the list and definitions of different [types](item-types.md) that the `item` key could hold.
 
 
