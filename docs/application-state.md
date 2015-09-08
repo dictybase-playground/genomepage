@@ -317,3 +317,16 @@ Get the first two tabs,sections and their subsections
                         console.log(data);
                     });
 ```
+
+## Subsections
+Each subsection is consist of two keys `key` and `item`. The `item` has two keys, `type` 
+and `data`.
+```js
+    item: {
+        type: <defines the shape of data>
+        data: <to be used for display>
+    }
+```
+Here are the list and definitions of different [types] that the `item` key could hold.
+
+
