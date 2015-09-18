@@ -4,33 +4,67 @@ The genomepage application has
 * Each tabs has a list of sections.
 * Each sections has bunch of key value information. 
 
-So, based on above information, the state could look like this ...
+To model the shape of the data, ideas are borrowed from 
+json graph of [falcor js](http://netflix.github.io/falcor).
+First here is the relationship between the data for genomepage ...
 
-__Some idea borrowed from json graph of [falcor js](http://netflix.github.io/falcor)__
+```
+
+                    - section
+                    - section
+                  -- section
+                 /
+               tab    section
+    geneid - - tab -- section
+               tab    section
+                  \
+                   -- section
+                    - section
+                    - section
+```
+
+In case of a virtual json graph it could modeled like this
 
 ```js
     {
-        tabs: [
-            {
-                display: 'Gene Summary',
-                sections: [
-                    { $type: 'ref', value: ['sectionsByName', 1]},
-                    { $type: 'ref', value: ['sectionsByName', 2]},
-                    { $type: 'ref', value: ['sectionsByName', 3]},
-                    { $type: 'ref', value: ['sectionsByName', 4]},
-                    { $type: 'ref', value: ['sectionsByName', 5]},
-                    { $type: 'ref', value: ['sectionsByName', 6]}
+        genesById: {
+            'DDB_G0286355': {
+                name: 'mhcA',
+                tabs: [
+                    {$type: 'ref', value: ['tabsById', 1]},
+                    {$type: 'ref', value: ['tabsById', 2]}
                 ]
-            }, 
-            {
-                display: 'Protein Information',
-                sections: [
-                    { $type: 'ref', value: ['sectionsByName', 7]},
-                    { $type: 'ref', value: ['sectionsByName', 8]}
+            },
+            'DDB_G0288511': {
+                name: 'sadA',
+                tabs: [
+                    {$type: 'ref', value: ['tabsById', 3]},
+                    {$type: 'ref', value: ['tabsById', 4]}
                 ]
             }
-        ],
-        sectionsByName: {
+        },
+        ....
+        tabsById: {
+            1: {
+                display: 'Gene Summary',
+                sections: [
+                    { $type: 'ref', value: ['sectionsById', 1]},
+                    { $type: 'ref', value: ['sectionsById', 2]},
+                    { $type: 'ref', value: ['sectionsById', 3]},
+                    { $type: 'ref', value: ['sectionsById', 4]},
+                    { $type: 'ref', value: ['sectionsById', 5]},
+                    { $type: 'ref', value: ['sectionsById', 6]}
+                ]
+            }, 
+            2: {
+                display: 'Protein Information',
+                sections: [
+                    { $type: 'ref', value: ['sectionsById', 7]},
+                    { $type: 'ref', value: ['sectionsById', 8]}
+                ]
+            },
+            .....
+        sectionsById: {
             1: {
                 display: 'General Information',
                 subsections: {
@@ -44,7 +78,7 @@ __Some idea borrowed from json graph of [falcor js](http://netflix.github.io/fal
                             key: 'Community Annotations', 
                             item: { 
                                 type: 'link', 
-                                data: { url: 'http://', text: ''}
+                                data: { url: 'http://', image: 'http://', text: ''}
                             }
                         }
                    ]
@@ -79,236 +113,53 @@ __Some idea borrowed from json graph of [falcor js](http://netflix.github.io/fal
                     ]
                 }
             },
-            3: {
-                display: 'Gene Product Information',
-                subsections: {
-                    $type: 'atom',
-                    value: [
-                        { 
-                            key: 'Protein Coding Gene', 
-                            item: { 
-                                type: 'linkProps',
-                                data: { 
-                                    url: 'http://', 
-                                    text: 'DD091444',
-                                    props: ['Curator reviewed', 'Derived from gene prediction']
-
-                                }
-                            }
-                        },
-                        { 
-                            key: 'Protein Length', 
-                            item: {
-                                type: 'simple',
-                                data: '2116aa'
-                            }
-                        },
-                        { 
-                            key: 'Protein Molecular Weight', 
-                            item: {
-                                type: 'simple',
-                                data: '173.964'
-                            }
-                        },
-                        {   
-                            key: 'More Protein Data', 
-                            item: { 
-                                type: 'link',
-                                data: {
-                                    url: 'http://', 
-                                    text: 'Protein sequence, domains and much more'
-                                }
-                            }
-                        },
-                        { 
-                            key: 'Sequence', 
-                            item: { 
-                                type: 'select',
-                                data: {
-                                    options: [
-                                                { name: 'Protein', url: 'http://' },
-                                                { name: 'DNA coding sequence' }, 
-                                                { name: 'Genomic DNA', url: 'http://' }
-                                            ],
-                                    targets: ['Get Fasta', 'BLAST']
-                                }
-                            }
-                        }
-                    ]
-                 }
-            },
-            4: {
-                display: 'Associated Sequences',
-                subsections: {
-                    $type: 'atom',
-                    value: [
-                        { 
-                            key: 'GenBank Genomic Fragment', 
-                            item: {
-                                type: 'link',
-                                data: {
-                                    url: 'http://', 
-                                    text: 'M14628',
-                                }
-                            }
-                        },
-                        { 
-                            key: 'ESTs', 
-                            item: {
-                                type: 'linkList',
-                                data: [
-                                    { url: 'http://', text: 'DDB0044582'},
-                                    { url: 'http://', text: 'DDB0025925'},
-                                    { url: 'http://', text: 'DDB0153011'},
-                                    { url: 'http://', text: 'DDB0025367'},
-                                    { url: 'http://', text: 'DDB0025367'},
-                                    { url: 'http://', text: 'more'}
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            5: {
-                display: 'Latest References',
-                subsections: {
-                    $type: 'atom',
-                    value: [
-                        {
-                            item: {
-                                type: 'linkListImage',
-                                data: [
-                                    {url: 'http://', image: 'http://', text: ''},
-                                    {url: 'http://', image: 'http://', text: ''},
-                                    {url: 'http://', image: 'http://', text: ''}
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            6: {
-                display: 'General Information',
-                subsections: {
-                    $type: 'atom',
-                    value: [
-                        {
-                            key: 'Gene Product',
-                            item: {
-                                type: 'list',
-                                data: ['calmodulin-binding protein', 'nucleomorphin']
-                            }
-                        },
-                        {
-                            key: 'Protein ID',
-                            item: {
-                                type: 'simple',
-                                data: 'DDB0025367'
-                            }
-                        }, 
-                        { 
-                            key: 'Protein Length', 
-                            item: {
-                                type: 'simple',
-                                data: '2116aa'
-                            }
-                        },
-                        { 
-                            key: 'Protein Molecular Weight', 
-                            item: {
-                                type: 'simple',
-                                data: '173.964'
-                            }
-                        },
-                        {
-                            key: 'Amino Acid Composition',
-                            item: {
-                                type: 'link',
-                                data: {
-                                    url: 'http://',
-                                    text: 'View amino acid composition'
-                                }
-                            }
-                        }
-                    ]
-                }
-            },
-            7: {
-                display: 'Links',
-                subsections: {
-                    $type: 'atom',
-                    value: [
-                        {
-                            key: 'External Links',
-                            item: {
-                                type: 'linkList',
-                                data: [
-                                    {url: 'http://', text: ''},
-                                    {url: 'http://', text: ''}
-                                ]
-                            }
-                        }
-                    ]
-                }
-            },
-            8: {
-                display: 'Protein Sequence',
-                subsections: {
-                    $type: 'atom',
-                    value: [
-                        {
-                            key: 'Protein Sequence',
-                            item: {
-                                type: 'simple',
-                                data: 'MGLLDGNPANETSLVLLLFADFSSML'
-                            }
-                        }
-                    ]
-                }
-            }
+            ......
         }
-    }
-}
 ```
 
-The shape of the data is modeled as [JSON Graph](http://netflix.github.io/falcor/documentation/jsongraph.html)
-where each section of a tab are linked to an object under `sectionByName` key. Each section contain its subsections
-where each of them is of type [atom](http://netflix.github.io/falcor/documentation/jsongraph.html#new-primitive-value-types).
-The `atom` type defined by `falcor` allow to retrieve the entire subsection instead of the default behaviour of fetching
-it in piece by piece. This is because the entire subsection is needed for every section and the subsections are not
-expected to be grow rapidly.
+All the genes, their tabs and sections could be modeled in this virtual structures. The graph could be looked up
+`gene id`, tab id and even individual sections as needed.
+
+The shape of the data is modeled as [JSON
+Graph](http://netflix.github.io/falcor/documentation/jsongraph.html). In this
+graph, each gene is under `genesById` and each of them linked to correspending
+tabs which in turn linked to its sections.Each section contain its subsections
+where each of them is of type
+[atom](http://netflix.github.io/falcor/documentation/jsongraph.html#new-primitive-value-types).
+The `atom` type defined by `falcor` allow to retrieve the entire subsection
+instead of the default behaviour of fetching it in piece by piece. This is
+because the entire subsection is needed for every section and the subsections
+are not expected to be grow rapidly.
 
 Here are few ways to fetch data from the JSON object.
 
 
-Get the display name of tabs
+Get the first tab and all the sections of a given gene
 
 ```js
     var model = new falcor.Model({cache: {JSON Graph ....}});
     model.get([
-                'tabs',
+                'genesById',
+                'DDB_G0286355',
+                'tabs', 
                 0,
-                'display'
-            ])
-            .then(function(data) {
-                console.log(data);
-            });
-    model.get([
-                'tabs',
-                {from:0, to:1},
-                'display'
-            ])
-            .then(function(data) {
-                console.log(data);
+                ['display', 'sections'], 
+                {from: 0, to: 10 },
+                ['display', 'subsections']
+                ]).then(function(data) {
+                        console.log(data);
+                    },
+                    function(error){
+                        console.log(error);
             });
 ```
 
-Get the first two tabs,sections and their subsections
+Now once you have the all the tab ids then you could any other tab and it sections
 
 ```js
             model.get([
-                        'tabs', 
-                        {from: 0, to: 1}, 
+                        'tabsById', 
+                        2,
                         ['display', 'sections'], 
                         {from: 0, to: 1 },
                         ['display','subsections']
@@ -318,15 +169,29 @@ Get the first two tabs,sections and their subsections
                     });
 ```
 
+Now you could also fetch a single section as needed
+
+```js
+    model.getValue([
+        'sectionsById',
+        2,
+        ['display', 'subsections']
+    ]).then(function(data) {
+        console.log(data);
+    });
+```
+
 ## Subsections
 Each subsection is consist of two keys `key` and `item`. The `item` has two keys, `type` 
 and `data`.
+
 ```js
     item: {
         type: <defines the shape of data>
         data: <to be used for display>
     }
 ```
-Here are the list and definitions of different [types](item-types.md) that the `item` key could hold.
+Here is a detailed example of the various [subsections](details_section.md) and
+here are the list and definitions of different [types](item-types.md) that the `item` key could hold.
 
 
