@@ -39,10 +39,7 @@
   },
   "dependencies": {
     "react-router": "~0.10.2",
-    "jquery": "2.x",
-    "bootstrap": "3.x",
-    "immutable": "~3.0.2",
-    "object-assign": "~1.0.0",
+    "falcor": "~0.1.12",
     "dicty-react-components": "dictyBase/dicty-react-components"
   },
   "scripts": {
