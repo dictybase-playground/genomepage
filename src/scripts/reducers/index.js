@@ -31,7 +31,7 @@ export const geneIdReducer = (state = initialState, action) => {
             return {
                 ...state,
                 id: action.id,
-                response: action.response,
+                response: action.payload,
                 error: null,
                 loading: false
         };
@@ -39,7 +39,7 @@ export const geneIdReducer = (state = initialState, action) => {
             return {
                 ...state,
                 id: action.id,
-                error: action.error,
+                error: action.payload,
                 response: null,
                 loading: false
         };
@@ -66,7 +66,7 @@ export const tabIdReducer = (state = initialState, action) => {
             return {
                 ...state,
                 id: action.id,
-                response: action.response,
+                response: action.payload,
                 error: null,
                 loading: false
         };
@@ -74,11 +74,9 @@ export const tabIdReducer = (state = initialState, action) => {
             return {
                 ...state,
                 id: action.id,
-                error: action.error,
+                error: action.payload,
                 response: null,
                 loading: false
         };
-        default:
-            return state;
     }
 }
