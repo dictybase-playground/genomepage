@@ -38,7 +38,11 @@
     "gh-pages": "~0.2.0"
   },
   "dependencies": {
-    "react-router": "~0.10.2",
+    "object-assign": "^3.0.0",
+    "react": "~0.13.3",
+    "redux": "~3.0.0",
+    "react-redux": "2.x.x",
+    "react-router": "^1.0.0-rc1",
     "falcor": "~0.1.12",
     "dicty-react-components": "dictyBase/dicty-react-components"
   },
